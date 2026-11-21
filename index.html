@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id" data-font-scale="normal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      var savedScheme = localStorage.getItem("cat-bpk-color-scheme");
+      if (savedScheme === "light" || savedScheme === "dark") {
+        document.querySelector('meta[name="color-scheme"]').content = savedScheme;
+      }
+      var savedScale = localStorage.getItem("cat-bpk-font-scale");
+      if (savedScale === "normal" || savedScale === "large" || savedScale === "xlarge") {
+        document.documentElement.setAttribute("data-font-scale", savedScale);
+      }
+    } catch (e) {}
+  </script>
+  <title>Beranda | Simulasi CAT Pemetaan Pegawai BPK RI 2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#main-heading" class="skip-link visually-hidden">Langsung ke konten utama</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <svg class="brand-emblem" aria-hidden="true" viewBox="0 0 40 40" width="36" height="36">
+          <rect x="2" y="2" width="36" height="36" rx="8" fill="#143154" stroke="#d4a024" stroke-width="2"></rect>
+          <path d="M20 8L30 14V21C30 27.5 25.7 32.1 20 34C14.3 32.1 10 27.5 10 21V14L20 8Z" fill="none" stroke="#e2b43b" stroke-width="2.2"></path>
+          <path d="M15 20H25M20 15V26" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"></path>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-title">CAT Pemetaan Pegawai BPK RI</span>
+          <span class="brand-subtitle">Persiapan Nota Dinas No. 2377/B/SETJEN.3/KPG.05.02/11/2026</span>
+        </div>
+      </div>
+
+      <div class="header-status" id="header-exam-meta" hidden>
+        <span class="badge badge-level" id="header-level-badge"></span>
+        <span class="badge badge-info" id="header-role-badge"></span>
+        <span class="badge badge-subtest" id="header-subtest-badge"></span>
+        <div class="timer-pill" id="timer-display" aria-label="Sisa waktu simulasi">
+          <span class="timer-label">Sisa Waktu</span>
+          <strong class="timer-value" id="timer-value">04:00:00</strong>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost" id="btn-open-guide">
+          Panduan &amp; Kisi-Kisi
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-open-settings">
+          Pengaturan
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- ==================== VIEW 1: LOBBY ==================== -->
+    <section id="view-lobby" class="view-container">
+      <div class="hero-card card">
+        <div class="hero-header">
+          <span class="pill-tag">Simulator Mandiri Non-Resmi • Persiapan 7–8 Desember 2026</span>
+          <h1 id="main-heading" tabindex="-1">Simulasi CAT Pemetaan Pegawai dalam Jabatan 2026</h1>
+          <p class="hero-desc">
+            Latihan terstruktur untuk mengukur potensi kognitif, potensi perilaku, kompetensi manajerial, dan kompetensi sosial kultural sesuai standar PermenPANRB Nomor 38 Tahun 2017 dan persiapan teknis Nota Dinas Biro SDM BPK RI Nomor 2377/B/SETJEN.3/KPG.05.02/11/2026.
+          </p>
+        </div>
+        <dl class="meta-grid">
+          <div class="meta-item">
+            <dt>Durasi Simulasi Penuh</dt>
+            <dd>4 Jam (240 Menit)</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Jumlah Bank Soal</dt>
+            <dd>1.100 Soal (1.000 Soal CAT BKN + 100 Lanjutan BPK)</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Wilayah Sasaran</dt>
+            <dd>4 Perwakilan Papua</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Metode Penilaian</dt>
+            <dd>JPM &amp; Matriks 9-Kotak</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div id="resume-banner" class="card resume-banner" hidden>
+        <div class="resume-content">
+          <h2 class="resume-title">Sesi Simulasi Belum Selesai Ditemukan</h2>
+          <p id="resume-summary" class="resume-text"></p>
+        </div>
+        <div class="resume-actions">
+          <button type="button" class="btn btn-primary" id="btn-resume-session">Lanjutkan Sesi</button>
+          <button type="button" class="btn btn-secondary" id="btn-discard-session">Hapus Sesi</button>
+        </div>
+      </div>
+
+      <div class="lobby-grid">
+        <form id="lobby-form" class="card setup-card" novalidate>
+          <h2>Konfigurasi Sesi Simulasi</h2>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="participant-name">Nama Peserta</label>
+              <input type="text" id="participant-name" name="participantName" autocomplete="name" placeholder="Masukkan nama lengkap" required>
+              <span class="field-hint" id="name-hint">Digunakan pada lembar laporan hasil simulasi lokal.</span>
+            </div>
+
+            <div class="form-field">
+              <label for="participant-unit">Satuan Kerja / Perwakilan</label>
+              <select id="participant-unit" name="participantUnit">
+                <option value="BPK Perwakilan Provinsi Papua Tengah">BPK Perwakilan Provinsi Papua Tengah</option>
+                <option value="BPK Perwakilan Provinsi Papua">BPK Perwakilan Provinsi Papua</option>
+                <option value="BPK Perwakilan Provinsi Papua Pegunungan">BPK Perwakilan Provinsi Papua Pegunungan</option>
+                <option value="BPK Perwakilan Provinsi Papua Selatan">BPK Perwakilan Provinsi Papua Selatan</option>
+              </select>
+            </div>
+
+            <div class="form-field form-field-full">
+              <label for="participant-role">Kelompok Jabatan &amp; Target Standar</label>
+              <select id="participant-role" name="participantRole">
+                <option value="jf_pertama">Nonmanajerial — JF Ahli Pertama / Pelaksana (Target Level 2)</option>
+                <option value="jf_muda" selected>Nonmanajerial — JF Ahli Muda (Target Level 2–3)</option>
+                <option value="jf_madya">Nonmanajerial — JF Ahli Madya / Pejabat Pengawas (Target Level 3)</option>
+                <option value="manajerial">Manajerial — Administrator / Pimpinan Unit (Target Level 4)</option>
+              </select>
+            </div>
+          </div>
+
+          <fieldset class="level-fieldset">
+            <legend>Pilih Level Soal / Tingkat Kesulitan</legend>
+            <div class="level-grid">
+              <label class="level-option" for="level-bkn">
+                <input type="radio" id="level-bkn" name="simLevel" value="standar_bkn" checked>
+                <span class="mode-body">
+                  <strong class="mode-title">Level 1 — Standar CAT BKN (1.000 Bank Soal Dinamis)</strong>
+                  <span class="mode-meta">Bank soal resmi 1.000 soal CAT/CACT BKN. Setiap kali simulasi baru dimulai, sistem otomatis mengundi 100 soal berbeda secara proporsional per subtes sehingga latihan tidak monoton.</span>
+                </span>
+              </label>
+
+              <label class="level-option" for="level-bpk">
+                <input type="radio" id="level-bpk" name="simLevel" value="lanjutan_bpk">
+                <span class="mode-body">
+                  <strong class="mode-title">Level 2 — Lanjutan Kontekstual BPK RI (Lebih Menantang)</strong>
+                  <span class="mode-meta">100 soal studi kasus mendalam bernuansa pemeriksaan BPK RI dan wilayah Papua. Cocok untuk penguatan analisis dan daya tahan tes 4 jam.</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="mode-fieldset">
+            <legend>Pilih Mode Latihan / Simulasi</legend>
+            <div class="mode-grid">
+              <label class="mode-option" for="mode-full">
+                <input type="radio" id="mode-full" name="simMode" value="full" checked>
+                <span class="mode-body">
+                  <strong class="mode-title">Simulasi Penuh CAT (240 Menit)</strong>
+                  <span class="mode-meta">100 soal lengkap di 4 subtes, tanpa bocoran aspek/pembahasan saat tes.</span>
+                </span>
+              </label>
+
+              <label class="mode-option" for="mode-sprint">
+                <input type="radio" id="mode-sprint" name="simMode" value="sprint">
+                <span class="mode-body">
+                  <strong class="mode-title">Latihan Cepat / Sprint (45 Menit)</strong>
+                  <span class="mode-meta">28 soal proporsional acak dari seluruh subtes untuk latihan harian.</span>
+                </span>
+              </label>
+
+              <label class="mode-option" for="mode-sub1">
+                <input type="radio" id="mode-sub1" name="simMode" value="subtes_1">
+                <span class="mode-body">
+                  <strong class="mode-title">Fokus Subtes 1: Potensi Kognitif (60 Menit)</strong>
+                  <span class="mode-meta">30 soal verbal, numerik, penalaran logis-analitis, dan pola spasial SVG.</span>
+                </span>
+              </label>
+
+              <label class="mode-option" for="mode-sub2">
+                <input type="radio" id="mode-sub2" name="simMode" value="subtes_2">
+                <span class="mode-body">
+                  <strong class="mode-title">Fokus Subtes 2: Potensi Perilaku (45 Menit)</strong>
+                  <span class="mode-meta">20 soal berpikir kritis, pemecahan masalah, interpersonal, kesadaran diri.</span>
+                </span>
+              </label>
+
+              <label class="mode-option" for="mode-sub3">
+                <input type="radio" id="mode-sub3" name="simMode" value="subtes_3">
+                <span class="mode-body">
+                  <strong class="mode-title">Fokus Subtes 3: Kompetensi Manajerial (90 Menit)</strong>
+                  <span class="mode-meta">36 soal SJT mencakup 8 kompetensi manajerial PermenPANRB 38/2017.</span>
+                </span>
+              </label>
+
+              <label class="mode-option" for="mode-sub4">
+                <input type="radio" id="mode-sub4" name="simMode" value="subtes_4">
+                <span class="mode-body">
+                  <strong class="mode-title">Fokus Subtes 4: Sosial Kultural (45 Menit)</strong>
+                  <span class="mode-meta">14 soal SJT Perekat Bangsa dalam konteks kerja BPK dan wilayah Papua.</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="options-toggles" id="practice-options-fieldset">
+            <legend>Opsi Latihan &amp; Ketentuan Jawaban</legend>
+            <input type="checkbox" id="opt-study-mode" name="studyMode" hidden disabled>
+            <label class="check-option" for="opt-shuffle-mode">
+              <input type="checkbox" id="opt-shuffle-mode" name="shuffleMode">
+              <span>Acak urutan soal dalam tiap subtes (aktif untuk mode latihan / sprint)</span>
+            </label>
+            <p class="history-item-meta" style="margin: 0.4rem 0 0; color: var(--accent);">
+              🔒 <strong>Ketentuan Resmi CAT:</strong> Kunci jawaban yang benar, analisis skor, dan tips cara cepat menjawab HANYA ditampilkan saat simulasi telah selesai (di halaman Laporan Evaluasi), bukan saat sedang menjawab soal.
+            </p>
+          </fieldset>
+
+          <div class="form-error" id="lobby-error" role="alert" hidden></div>
+
+          <div class="form-submit-row">
+            <button type="submit" class="btn btn-primary btn-lg" id="btn-start-sim">Mulai Simulasi CAT</button>
+          </div>
+        </form>
+
+        <div class="lobby-side">
+          <div class="card">
+            <h2>Struktur Materi &amp; Alokasi Waktu</h2>
+            <div class="table-wrap">
+              <table>
+                <caption>Alokasi waktu dan jumlah soal tiap subtes pada Simulasi Penuh (total 240 menit)</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Subtes</th>
+                    <th scope="col">Soal</th>
+                    <th scope="col">Waktu</th>
+                    <th scope="col">Skala Nilai</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1. Potensi Kognitif</th>
+                    <td>30</td>
+                    <td>60 mnt</td>
+                    <td>Benar / Salah</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2. Potensi Perilaku</th>
+                    <td>20</td>
+                    <td>45 mnt</td>
+                    <td>Bobot 1–4</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3. Manajerial SJT</th>
+                    <td>36</td>
+                    <td>90 mnt</td>
+                    <td>Bobot 1–4</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">4. Sosial Kultural SJT</th>
+                    <td>14</td>
+                    <td>45 mnt</td>
+                    <td>Bobot 1–4</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" id="history-section">
+            <div class="card-head-row">
+              <h2>Riwayat Hasil Simulasi</h2>
+              <button type="button" class="btn btn-sm btn-ghost" id="btn-clear-history" hidden>Hapus Riwayat</button>
+            </div>
+            <div id="history-list" class="history-list">
+              <p class="empty-state">Belum ada riwayat simulasi tersimpan di perangkat ini.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: EXAM ==================== -->
+    <section id="view-exam" class="view-container" hidden>
+      <div class="exam-topbar card">
+        <nav aria-label="Navigasi Subtes" id="subtest-nav" class="subtest-tabs"></nav>
+        <div class="exam-topbar-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-pause-timer" hidden>Jeda Waktu</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-exit-lobby">Beranda</button>
+          <button type="button" class="btn btn-danger btn-sm" id="btn-finish-exam">Akhiri &amp; Nilai</button>
+        </div>
+      </div>
+
+      <div class="exam-layout">
+        <section class="exam-question-panel card" aria-labelledby="question-heading">
+          <div class="question-meta-row">
+            <div class="question-title-group">
+              <h1 id="question-heading" tabindex="-1">Soal 1 dari 100</h1>
+              <span class="badge badge-subtest" id="q-subtest-label"></span>
+              <span class="badge badge-aspect" id="q-aspect-label" hidden></span>
+            </div>
+            <div class="progress-wrap">
+              <label for="exam-progress" class="progress-label" id="progress-text">0 / 100 terjawab</label>
+              <progress id="exam-progress" max="100" value="0">0%</progress>
+            </div>
+          </div>
+
+          <div id="question-stimulus" class="stimulus-box" hidden></div>
+
+          <div id="question-stem" class="question-stem"></div>
+
+          <form id="answer-form" class="answer-form">
+            <fieldset class="options-fieldset">
+              <legend class="visually-hidden">Pilihan jawaban</legend>
+              <div id="options-container" class="options-list"></div>
+            </fieldset>
+          </form>
+
+          <div id="instant-feedback" class="instant-feedback" hidden>
+            <h3>Pembahasan Cepat</h3>
+            <p id="instant-feedback-score" class="feedback-score-line"></p>
+            <p id="instant-feedback-text"></p>
+          </div>
+
+          <div class="question-nav-bar">
+            <button type="button" class="btn btn-secondary" id="btn-prev-q">Sebelumnya</button>
+            <button type="button" class="btn btn-warning-outline" id="btn-flag-q" aria-pressed="false">
+              Tandai Ragu-ragu
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-next-q">Simpan &amp; Lanjutkan</button>
+          </div>
+        </section>
+
+        <aside class="exam-sidebar card" aria-label="Panel Navigasi Nomor Soal">
+          <div class="sidebar-header">
+            <h2>Peta Nomor Soal</h2>
+            <p class="sidebar-counts" id="sidebar-counts">0 terjawab • 0 ragu • 100 kosong</p>
+          </div>
+
+          <div class="legend-grid">
+            <span class="legend-item"><i class="swatch swatch-answered" aria-hidden="true"></i> Terjawab</span>
+            <span class="legend-item"><i class="swatch swatch-flagged" aria-hidden="true"></i> Ragu-ragu</span>
+            <span class="legend-item"><i class="swatch swatch-empty" aria-hidden="true"></i> Kosong</span>
+            <span class="legend-item"><i class="swatch swatch-current" aria-hidden="true"></i> Aktif</span>
+          </div>
+
+          <nav aria-label="Navigasi Nomor Soal" id="question-grid" class="question-grid"></nav>
+
+          <p class="shortcut-note">
+            Pintasan: <kbd>A</kbd>–<kbd>D</kbd> pilih opsi, <kbd>←</kbd>/<kbd>→</kbd> pindah soal, <kbd>R</kbd> tandai ragu.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: REPORT ==================== -->
+    <section id="view-report" class="view-container" hidden>
+      <div class="report-header card">
+        <div class="report-title-col">
+          <span class="pill-tag" id="report-mode-badge">Laporan Hasil Simulasi</span>
+          <h1 id="report-heading" tabindex="-1">Evaluasi Profil Potensi &amp; Kompetensi</h1>
+          <p id="report-participant-meta" class="report-meta"></p>
+        </div>
+        <div class="report-actions no-print">
+          <button type="button" class="btn btn-secondary" id="btn-print-report">Cetak / Simpan PDF</button>
+          <button type="button" class="btn btn-secondary" id="btn-export-json">Ekspor JSON</button>
+          <button type="button" class="btn btn-primary" id="btn-back-to-lobby">Kembali ke Beranda</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="report-kpi-grid"></div>
+
+      <div class="analytics-grid">
+        <div class="card chart-card">
+          <h2>Profil Kompetensi vs Target Jabatan</h2>
+          <figure class="radar-figure">
+            <div id="radar-chart-container" class="radar-container"></div>
+            <figcaption id="radar-caption">
+              Garis penuh biru menunjukkan capaian simulasi (skala 1–4); garis putus-putus emas menunjukkan target standar jabatan pilihan.
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="card matrix-card">
+          <h2>Matriks Pemetaan 9-Kotak (Talent Grid)</h2>
+          <p class="matrix-subtitle">Pemetaan posisi Potensi (sumbu vertikal) terhadap Kompetensi Manajerial &amp; Sosial Kultural (sumbu horizontal).</p>
+          <div id="nine-box-container" class="nine-box-wrap"></div>
+          <div id="nine-box-recommendation" class="nine-box-advice"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Analisis Rincian per Aspek &amp; Kesenjangan (Gap)</h2>
+        <div class="table-wrap">
+          <table id="aspect-breakdown-table">
+            <caption>Capaian skor, estimasi level PermenPANRB 38/2017, dan kesenjangan terhadap target jabatan per aspek</caption>
+            <thead>
+              <tr>
+                <th scope="col">Kelompok / Aspek</th>
+                <th scope="col">Soal</th>
+                <th scope="col">Skor</th>
+                <th scope="col">Persentase</th>
+                <th scope="col">Estimasi Level</th>
+                <th scope="col">Target</th>
+                <th scope="col">Gap</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody id="aspect-breakdown-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="review-header">
+          <h2>Hasil Jawaban Lengkap, Kunci Benar &amp; Tips Cara Cepat Menjawab</h2>
+          <div class="review-filters no-print">
+            <div class="filter-field">
+              <label for="filter-subtest">Subtes</label>
+              <select id="filter-subtest">
+                <option value="all">Semua Subtes</option>
+                <option value="potensi_kognitif">Subtes 1: Potensi Kognitif</option>
+                <option value="potensi_perilaku">Subtes 2: Potensi Perilaku</option>
+                <option value="manajerial">Subtes 3: Kompetensi Manajerial</option>
+                <option value="sosiokultural">Subtes 4: Sosial Kultural</option>
+              </select>
+            </div>
+            <div class="filter-field">
+              <label for="filter-status">Status</label>
+              <select id="filter-status">
+                <option value="all">Semua Soal</option>
+                <option value="suboptimal">Perlu Perbaikan (Skor &lt; Maksimal / Salah / Kosong)</option>
+                <option value="optimal">Sudah Optimal / Benar</option>
+              </select>
+            </div>
+            <div class="filter-field">
+              <label for="filter-aspect">Aspek</label>
+              <select id="filter-aspect">
+                <option value="all">Semua Aspek</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div id="review-list" class="review-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Simulator Latihan Mandiri Non-Resmi — Mengacu pada Nota Dinas Biro SDM BPK RI No. 2377/B/SETJEN.3/KPG.05.02/11/2026 dan PermenPANRB No. 38 Tahun 2017. Seluruh data jawaban disimpan secara lokal di browser Anda.
+    </p>
+  </footer>
+
+  <!-- ==================== NATIVE DIALOGS ==================== -->
+  <dialog id="settings-dialog" closedby="any" aria-labelledby="settings-title">
+    <div class="dialog-header">
+      <h2 id="settings-title">Pengaturan Tampilan &amp; Aksesibilitas</h2>
+    </div>
+    <div class="dialog-body">
+      <fieldset class="dialog-fieldset">
+        <legend>Skema Warna</legend>
+        <div class="radio-stack">
+          <label class="radio-card" for="theme-system">
+            <input type="radio" id="theme-system" name="colorScheme" value="system">
+            <span id="theme-system-label">Ikuti Sistem</span>
+          </label>
+          <label class="radio-card" for="theme-light">
+            <input type="radio" id="theme-light" name="colorScheme" value="light">
+            <span>Mode Terang</span>
+          </label>
+          <label class="radio-card" for="theme-dark">
+            <input type="radio" id="theme-dark" name="colorScheme" value="dark">
+            <span>Mode Gelap</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="dialog-fieldset">
+        <legend>Ukuran Teks</legend>
+        <div class="radio-stack">
+          <label class="radio-card" for="scale-normal">
+            <input type="radio" id="scale-normal" name="fontScale" value="normal">
+            <span>Normal (100%)</span>
+          </label>
+          <label class="radio-card" for="scale-large">
+            <input type="radio" id="scale-large" name="fontScale" value="large">
+            <span>Besar (112%)</span>
+          </label>
+          <label class="radio-card" for="scale-xlarge">
+            <input type="radio" id="scale-xlarge" name="fontScale" value="xlarge">
+            <span>Sangat Besar (125%)</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="shortcut-box">
+        <h3>Pintasan Keyboard Saat Simulasi</h3>
+        <ul>
+          <li><kbd>A</kbd>–<kbd>D</kbd> atau <kbd>1</kbd>–<kbd>4</kbd>: Memilih opsi jawaban</li>
+          <li><kbd>←</kbd> / <kbd>→</kbd>: Soal sebelumnya / berikutnya</li>
+          <li><kbd>R</kbd>: Menandai atau membatalkan status ragu-ragu</li>
+        </ul>
+      </div>
+    </div>
+    <form method="dialog" class="dialog-footer">
+      <button type="submit" class="btn btn-primary" value="close" autofocus>Tutup</button>
+    </form>
+  </dialog>
+
+  <dialog id="guide-dialog" closedby="any" aria-labelledby="guide-title">
+    <div class="dialog-header">
+      <h2 id="guide-title">Panduan Persiapan &amp; Kisi-Kisi Pemetaan BPK RI 2026</h2>
+    </div>
+    <div class="dialog-body guide-content">
+      <section>
+        <h3>1. Kesiapan Teknis Sesuai Nota Dinas (7–8 Desember 2026)</h3>
+        <ul>
+          <li><strong>Lokasi &amp; Moda</strong>: Aula dan ruang rapat BPK Perwakilan Provinsi Papua (diikuti pegawai BPK Perwakilan Provinsi Papua, Papua Pegunungan, Papua Tengah, dan Papua Selatan) menggunakan aplikasi CAT didampingi asesor Biro SDM.</li>
+          <li><strong>Perlengkapan Peserta</strong>: Laptop/PC pribadi, kabel pengisi daya (stopkontak tersedia), pulpen/pensil dan kertas catatan untuk hitung cepat numerik serta pemetaan skenario analitis.</li>
+          <li><strong>Manajemen Stamina 4 Jam</strong>: Alokasikan sekitar 1–1,5 menit per soal kognitif, jangan terpaku pada satu soal hitungan sulit (tandai ragu-ragu lalu lanjutkan), dan sisakan ruang konsentrasi penuh untuk membaca detail skenario SJT.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>2. Cakupan Kompetensi PermenPANRB No. 38 Tahun 2017</h3>
+        <ul>
+          <li><strong>8 Kompetensi Manajerial</strong>: Integritas, Kerja Sama, Komunikasi, Orientasi pada Hasil, Pelayanan Publik, Pengembangan Diri dan Orang Lain, Mengelola Perubahan, serta Pengambilan Keputusan.</li>
+          <li><strong>1 Kompetensi Sosial Kultural</strong>: Perekat Bangsa (kepekaan terhadap keberagaman budaya/agama/adat, kemampuan berhubungan sosial yang inklusif, serta kepekaan dan peran mediasi konflik).</li>
+          <li><strong>Aspek Potensi</strong>: Potensi Kognitif (verbal, numerik, penalaran logis-analitis, spasial) serta Potensi Perilaku (berpikir kritis-strategis, pemecahan masalah, interpersonal, kesadaran diri, dan motivasi/adaptabilitas).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>3. Pilihan Level Soal (Standar CAT BKN vs Lanjutan BPK RI)</h3>
+        <ul>
+          <li><strong>Level 1 — Standar CAT BKN</strong>: Soal bergaya langsung dan ringkas khas CAT/CACT BKN (TIU dasar, literasi keamanan digital, dan SJT ASN umum PermenPANRB 38/2017) dengan gradasi bobot yang lebih mudah dipetakan.</li>
+          <li><strong>Level 2 — Lanjutan Kontekstual BPK RI</strong>: Studi kasus analitis panjang bernuansa tugas pemeriksaan keuangan negara dan konteks wilayah Papua untuk melatih ketelitian dan stamina 4 jam.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>4. Strategi Membedakan Opsi Bobot 4 vs Bobot 3 pada Soal SJT</h3>
+        <ul>
+          <li><strong>Opsi Bobot 4 (Optimal)</strong>: Aktif menyelesaikan akar masalah, menjaga integritas/independensi BPK tanpa kompromi, berkoordinasi berjenjang sesuai tata kelola, menghormati keberagaman secara proaktif, serta berdampak langsung pada kualitas dan ketepatan waktu.</li>
+          <li><strong>Opsi Bobot 3 (Cukup Baik)</strong>: Patuh pada aturan dan bersikap positif, tetapi cenderung pasif, hanya menunggu arahan, atau menunda penyelesaian masalah lintas pihak.</li>
+          <li><strong>Opsi Bobot 2 &amp; 1</strong>: Bersifat reaktif, emosional, mengabaikan prosedur, atau berisiko melanggar kode etik pemeriksa serta memicu konflik sosial.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>5. Tips &amp; Trik Cara Cepat Menjawab Soal CAT Pemetaan</h3>
+        <ul>
+          <li><strong>Trik Verbal (Analogi &amp; Bacaan)</strong>: Buat 1 kalimat aktif sederhana untuk menghubungkan kata A dan B (<em>'A berfungsi untuk B'</em>). Untuk teks panjang, baca pertanyaan dan kata kuncinya DULU baru lakukan teknik <em>scanning</em> di paragraf.</li>
+          <li><strong>Trik Numerik (Hitung Cepat)</strong>: Gunakan trik basis 10% untuk persentase, amati angka satuan (digit terakhir) pada pilihan jawaban untuk mengeliminasi opsi salah tanpa mencakar pecahan panjang, dan bagi deret berfluktuasi menjadi 2 larik terpisah (ganjil-genap).</li>
+          <li><strong>Trik Silogisme (Logika)</strong>: Ingat hukum baku: jika ada salah satu premis partikular (<em>sebagian</em>), simpulan WAJIB memakai kata <em>sebagian</em>. Jangan pilih opsi yang memuat asumsi baru di luar premis soal.</li>
+          <li><strong>Trik Spasial (Pola Gambar)</strong>: Tetapkan satu elemen jangkar terkecil (titik/panah), amati derajat perputarannya (45&deg;/90&deg;), lalu langsung coret opsi yang posisi jangkarnya salah.</li>
+          <li><strong>Formula Pasti Skor 4 (SJT Manajerial &amp; Soskul)</strong>: Selalu pilih opsi tindakan langsung yang solutif, bertanggung jawab penuh, taat SOP/kode etik, tidak melempar urusan ke orang lain, dan mengedepankan musyawarah mufakat.</li>
+        </ul>
+      </section>
+    </div>
+    <form method="dialog" class="dialog-footer">
+      <button type="submit" class="btn btn-primary" value="close" autofocus>Mengerti</button>
+    </form>
+  </dialog>
+
+  <dialog id="confirm-submit-dialog" aria-labelledby="submit-title">
+    <div class="dialog-header">
+      <h2 id="submit-title">Akhiri dan Nilai Simulasi?</h2>
+    </div>
+    <div class="dialog-body">
+      <p id="submit-summary-text">Pastikan Anda telah memeriksa seluruh jawaban sebelum mengakhiri sesi.</p>
+      <div id="submit-warning-box" class="warning-callout" hidden></div>
+    </div>
+    <form method="dialog" class="dialog-footer">
+      <button type="submit" class="btn btn-secondary" value="cancel" autofocus>Periksa Kembali</button>
+      <button type="submit" class="btn btn-danger" value="confirm">Ya, Akhiri &amp; Nilai</button>
+    </form>
+  </dialog>
+
+  <dialog id="confirm-reset-dialog" aria-labelledby="reset-title">
+    <div class="dialog-header">
+      <h2 id="reset-title">Konfirmasi Keluar / Hapus Sesi</h2>
+    </div>
+    <div class="dialog-body">
+      <p id="reset-summary-text">Progres simulasi saat ini akan dihapus jika Anda memilih melanjutkan.</p>
+    </div>
+    <form method="dialog" class="dialog-footer">
+      <button type="submit" class="btn btn-secondary" value="cancel" autofocus>Batal</button>
+      <button type="submit" class="btn btn-danger" value="confirm">Ya, Lanjutkan</button>
+    </form>
+  </dialog>
+
+  <!-- Centralized Live Regions -->
+  <div id="live-polite" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <div id="live-assertive" class="visually-hidden" aria-live="assertive" aria-atomic="true"></div>
+
+  <script src="data/bank-soal-bkn-potensi.js"></script>
+  <script src="data/bank-soal-bkn-kompetensi.js"></script>
+  <script src="data/bank-soal-bkn-ekstra.js"></script>
+  <script src="data/bank-soal-potensi.js"></script>
+  <script src="data/bank-soal-kompetensi.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
